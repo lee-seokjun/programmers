@@ -1,0 +1,57 @@
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
+class Solution {
+    
+    static String [] staticWords;
+    
+    public int solution(String begin, String target, String[] words) {
+        staticWords = words;
+        Queue<String> queue = new LinkedList<>();
+        queue.add(begin);
+        int queueLength;
+        int idx = 0;
+        
+        // while((queueLength = queue.size()) != 0)  {
+        //     for(int j = 0; j < queueLength; j++) {
+        //         String name = queue.poll();
+        //         if(target.equals(name)) {
+        //             return idx;
+        //         }
+        //         queue.addAll(getNext(name));
+        //     }
+        //     idx++;
+        // }
+        
+        for(int i=0; i<words.length; i++)  {
+            queueLength= queue.size();
+            for(int j = 0; j < queueLength; j++) {
+                String name = queue.poll();
+                if(target.equals(name)) {
+                    return i;
+                }
+                queue.addAll(getNext(name));
+            }
+        }
+        
+        return 0;
+    }
+    
+    public static Queue<String> getNext(String name) {
+        return IntStream.range(0, staticWords.length)
+                .filter(i -> isChangeOne(name, staticWords[i]))
+                .mapToObj(Solution::getName)
+                .collect(Collectors.toCollection(LinkedList::new));
+    }
+    public static boolean isChangeOne(String a, String b) {
+        return IntStream.range(0, a.length())
+                .filter(i -> a.charAt(i) != b.charAt(i))
+                .count() == 1;
+    }
+
+    public static String getName (int idx) {
+        return staticWords[idx];
+    }
+}
+
