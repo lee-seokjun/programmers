@@ -1,0 +1,45 @@
+import java.util.function.Function;
+import java.util.stream.IntStream;
+
+class Solution {
+    static int staticTarget;
+    static int staticLength;
+    static int [] staticNumbers;
+    
+    public int solution(int[] numbers, int target) {
+        staticNumbers = numbers;
+        staticTarget = target;
+        staticLength = numbers.length;
+
+        return (int)IntStream.range(0, (int)Math.pow(2, staticLength)) 
+                // 모든 경우의 수의 가짓수는 2^n 길이 만큼의 수가 만들어짐
+                .mapToObj(Solution::initFunctions) // 모든 경우의 수를 가진 배열로 변환
+                .filter(Solution::getResult)    // 경우에 맞게 numbers를 더하고, target과 비교
+                .count();
+    }
+    
+    public static boolean [] initFunctions(int num) {
+        // ++++
+        // +++-
+        // ++-+ 
+        // 등의 모든 경우의 수를 만듬 (-) -> false, (+) -> true
+        boolean [] res = new boolean[staticLength];
+        String binaryNum = Integer.toString(num, 2);
+        
+        for(int i=0; i< binaryNum.length(); i ++) {
+            if ('1' == binaryNum.charAt(i)) {
+                res[binaryNum.length() -i -1] = true;
+            }
+        }
+        
+        return res;
+    }
+
+    public static boolean getResult(boolean[] functions) {
+        // numbers를 양수 또는 음수로 변환하여 sum
+        return IntStream
+                .range(0, staticLength)
+                .map(i -> !functions[i] ? staticNumbers[i] * -1 : staticNumbers[i])
+                .sum() == staticTarget;
+    }
+}
