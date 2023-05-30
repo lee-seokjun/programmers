@@ -12,18 +12,7 @@ class Solution {
         queue.add(begin);
         int queueLength;
         int idx = 0;
-        
-        // while((queueLength = queue.size()) != 0)  {
-        //     for(int j = 0; j < queueLength; j++) {
-        //         String name = queue.poll();
-        //         if(target.equals(name)) {
-        //             return idx;
-        //         }
-        //         queue.addAll(getNext(name));
-        //     }
-        //     idx++;
-        // }
-        
+                
         for(int i=0; i<words.length; i++)  {
             queueLength= queue.size();
             for(int j = 0; j < queueLength; j++) {
